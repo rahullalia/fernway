@@ -1,26 +1,151 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-hanken);
+  --font-heading: var(--font-fraunces);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-paper-deep: var(--paper-deep);
+  --color-pine-deep: var(--pine-deep);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --ease-out: var(--ease-out-strong);
+  --ease-in-out: var(--ease-in-out-strong);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #f5f1e8;
+  --foreground: #26221a;
+  --card: #fbf8f1;
+  --card-foreground: #26221a;
+  --popover: #fbf8f1;
+  --popover-foreground: #26221a;
+  --primary: #32493a;
+  --primary-foreground: #f5f1e8;
+  --secondary: #e9e2d1;
+  --secondary-foreground: #26221a;
+  --muted: #ece6d7;
+  --muted-foreground: #5d5747;
+  --accent: #e9e2d1;
+  --accent-foreground: #26221a;
+  --destructive: #96402c;
+  --border: #dfd6c2;
+  --input: #c9bfa7;
+  --ring: #32493a;
+  --radius: 0.75rem;
+  --paper-deep: #ede7d8;
+  --pine-deep: #283b2e;
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  color-scheme: light;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-fraunces);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1.25rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Underline that draws in from the left on hover. */
+@utility link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 250ms var(--ease-out-strong);
+  padding-bottom: 2px;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-size: 100% 1px;
+    }
+  }
+}
+
+/* Scroll reveals. Content is fully visible without JavaScript;
+   the .js class is added by an inline script in the root layout. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 650ms var(--ease-out-strong),
+      transform 650ms var(--ease-out-strong);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal="visible"] {
+    opacity: 1;
+    transform: none;
+  }
 }
