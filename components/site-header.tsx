@@ -5,35 +5,75 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { site } from "@/lib/site";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { formatMinutes, openHours, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  { href: "/services", label: "Services" },
-  { href: "/about", label: "About" },
-  { href: "/faq", label: "FAQ" },
+const links = [
+  { href: "/", label: "home" },
+  { href: "/services", label: "the menu" },
+  { href: "/about", label: "about" },
+  { href: "/faq", label: "questions" },
+  { href: "/book", label: "book" },
 ];
+
+const DAY_NAMES = [
+  "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+];
+
+function statusFor(now: Date) {
+  const day = now.getDay();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const today = openHours[day];
+  if (today && mins < today.open) {
+    return `opens ${formatMinutes(today.open)} today`;
+  }
+  if (today && mins < today.close) {
+    return today.close >= 1260
+      ? `late night · open until ${formatMinutes(today.close)}`
+      : `open today until ${formatMinutes(today.close)}`;
+  }
+  for (let i = 1; i <= 7; i++) {
+    const next = openHours[(day + i) % 7];
+    if (next) {
+      return `closed · back ${DAY_NAMES[(day + i) % 7]} ${formatMinutes(next.open)}`;
+    }
+  }
+  return "";
+}
+
+function StatusLine({ className }: { className?: string }) {
+  const [status, setStatus] = React.useState("wed to sun · late thursdays");
+  React.useEffect(() => {
+    setStatus(statusFor(new Date()));
+  }, []);
+  return (
+    <p className={cn("type-mono", className)}>
+      <span aria-hidden="true" className="mr-2 inline-block size-[7px] rounded-full bg-primary align-middle" />
+      {status}
+    </p>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [overlayOpen, setOverlayOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const closeRef = React.useRef<HTMLButtonElement>(null);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  React.useEffect(() => {
-    setOpen(false);
+    setOverlayOpen(false);
+    setDrawerOpen(false);
   }, [pathname]);
 
   React.useEffect(() => {
-    if (open) {
+    if (overlayOpen) {
       document.documentElement.style.overflow = "hidden";
       closeRef.current?.focus();
     } else {
@@ -41,7 +81,7 @@ export function SiteHeader() {
     }
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpen(false);
+        setOverlayOpen(false);
         triggerRef.current?.focus();
       }
     };
@@ -50,122 +90,136 @@ export function SiteHeader() {
       window.removeEventListener("keydown", onKey);
       document.documentElement.style.overflow = "";
     };
-  }, [open]);
+  }, [overlayOpen]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-40 bg-background transition-shadow duration-200",
-        scrolled && "shadow-[0_1px_0_0_var(--border)]"
-      )}
-    >
-      <div className="wrap flex h-16 items-center justify-between sm:h-18">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/95 backdrop-blur-sm">
+      <div className="wrap flex h-16 items-center justify-between gap-4">
         <Link
           href="/"
-          className="font-heading text-[1.4rem] tracking-[-0.01em]"
+          className="display text-[1.55rem]"
           aria-label="Fernway, home"
         >
-          Fernway
+          fernway
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "link-draw text-[0.95rem]",
-                pathname.startsWith(item.href)
-                  ? "[background-size:100%_1px]"
-                  : "text-foreground/80 hover:text-foreground"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Button asChild size="sm" className="ml-2 h-10 px-5">
-            <Link href="/book">Book an appointment</Link>
-          </Button>
-        </nav>
+        <StatusLine className="hidden md:block" />
 
-        <button
-          ref={triggerRef}
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-expanded={open}
-          aria-label="Open menu"
-          className="-mr-2 flex size-11 items-center justify-center md:hidden"
-        >
-          <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6">
-            <path
-              d="M3 8.5h18M3 15.5h18"
-              stroke="currentColor"
-              strokeWidth="1.25"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+        <div className="flex items-center gap-3">
+          <Button asChild size="sm">
+            <Link href="/book">book</Link>
+          </Button>
+
+          {/* Desktop: full-screen overlay menu */}
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={() => setOverlayOpen(true)}
+            aria-expanded={overlayOpen}
+            aria-label="Open menu"
+            className="type-mono hidden h-9 items-center rounded-[6px] px-3 text-foreground transition-colors hover:bg-secondary md:inline-flex"
+          >
+            menu
+          </button>
+
+          {/* Mobile: bottom sheet */}
+          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+            <DrawerTrigger
+              className="type-mono inline-flex h-9 items-center rounded-[6px] px-3 text-foreground transition-colors hover:bg-secondary md:hidden"
+              aria-label="Open menu"
+            >
+              menu
+            </DrawerTrigger>
+            <DrawerContent className="border-t border-border bg-card">
+              <DrawerTitle className="sr-only">Menu</DrawerTitle>
+              <nav aria-label="Main" className="flex flex-col px-6 pt-2 pb-4">
+                {links.map((item, i) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setDrawerOpen(false)}
+                    className={cn(
+                      "display border-b border-border/60 py-4 text-4xl last:border-b-0 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:fill-mode-both",
+                      pathname === item.href && "text-primary"
+                    )}
+                    style={{ animationDelay: `${50 + i * 40}ms` }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+              <div className="flex items-center justify-between gap-4 border-t border-border/60 px-6 py-5">
+                <StatusLine />
+                <a href={site.phoneHref} className="type-mono link-draw text-foreground">
+                  {site.phone}
+                </a>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
       </div>
 
-      {open && (
+      {/* Desktop overlay */}
+      {overlayOpen && (
         <div
-          className="fixed inset-0 z-50 flex flex-col bg-background motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200 md:hidden"
+          className="fixed inset-0 z-50 hidden bg-background md:block motion-safe:animate-in motion-safe:fade-in motion-safe:duration-200"
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
         >
-          <div className="wrap flex h-16 items-center justify-between">
-            <Link href="/" className="font-heading text-[1.4rem]" onClick={() => setOpen(false)}>
-              Fernway
+          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div className="fog-a" />
+            <div className="fog-b" />
+          </div>
+          <div className="wrap relative flex h-16 items-center justify-between">
+            <Link href="/" className="display text-[1.55rem]" onClick={() => setOverlayOpen(false)}>
+              fernway
             </Link>
             <button
               ref={closeRef}
               type="button"
               onClick={() => {
-                setOpen(false);
+                setOverlayOpen(false);
                 triggerRef.current?.focus();
               }}
-              aria-label="Close menu"
-              className="-mr-2 flex size-11 items-center justify-center"
+              className="type-mono h-9 rounded-[6px] px-3 text-foreground transition-colors hover:bg-secondary"
             >
-              <svg aria-hidden="true" viewBox="0 0 24 24" className="size-6">
-                <path
-                  d="M5 5l14 14M19 5L5 19"
-                  stroke="currentColor"
-                  strokeWidth="1.25"
-                  strokeLinecap="round"
-                />
-              </svg>
+              close
             </button>
           </div>
-
-          <nav className="wrap mt-10 flex flex-col gap-2" aria-label="Main">
-            {[...nav, { href: "/book", label: "Book an appointment" }].map(
-              (item, i) => (
+          <div className="wrap relative mt-14 grid gap-16 lg:grid-cols-12">
+            <nav aria-label="Main" className="flex flex-col items-start gap-1 lg:col-span-8">
+              {links.map((item, i) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="py-3 font-heading text-4xl motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:fill-mode-both"
+                  onClick={() => setOverlayOpen(false)}
+                  className={cn(
+                    "display py-2 text-6xl transition-colors duration-200 hover:text-primary lg:text-7xl motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-400 motion-safe:ease-out motion-safe:fill-mode-both",
+                    pathname === item.href && "text-primary"
+                  )}
                   style={{ animationDelay: `${60 + i * 50}ms` }}
                 >
                   {item.label}
                 </Link>
-              )
-            )}
-          </nav>
-
-          <div className="wrap mt-auto mb-10 text-muted-foreground">
-            <p>
-              {site.address.street}, {site.address.city}, {site.address.state}
-            </p>
-            <p className="mt-1">
-              <a href={site.phoneHref} className="link-draw">
-                {site.phone}
-              </a>
-            </p>
-            <p className="mt-4 text-sm">
-              Open Wednesday through Sunday. Closed Monday and Tuesday.
-            </p>
+              ))}
+            </nav>
+            <div className="type-mono space-y-6 self-end pb-4 lg:col-span-4 motion-safe:animate-in motion-safe:fade-in motion-safe:fill-mode-both motion-safe:delay-300">
+              <div>
+                {site.hours.map((h) => (
+                  <p key={h.days} className="flex justify-between gap-6 border-b border-border/60 py-2">
+                    <span className="lowercase">{h.days}</span>
+                    <span className="lowercase">{h.time}</span>
+                  </p>
+                ))}
+              </div>
+              <p>
+                {site.address.street.toLowerCase()}, {site.address.city.toLowerCase()}, ny ·{" "}
+                <a href={site.phoneHref} className="link-draw text-foreground">
+                  {site.phone}
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       )}
