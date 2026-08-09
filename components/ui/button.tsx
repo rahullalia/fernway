@@ -5,20 +5,21 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium tracking-[0.01em] outline-none transition-[transform,background-color,color,border-color] duration-150 ease-(--ease-out-strong) active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex shrink-0 select-none items-center justify-center gap-2 whitespace-nowrap rounded-[6px] font-mono lowercase tracking-[0.02em] outline-none transition-[transform,background-color,color,border-color,box-shadow] duration-150 ease-(--ease-out-strong) active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-pine-deep",
+        default:
+          "bg-primary text-primary-foreground hover:bg-amber-bright hover:shadow-[0_0_32px_-6px_rgba(227,169,79,0.45)]",
         outline:
-          "border border-foreground/25 bg-transparent text-foreground hover:border-foreground/60",
+          "border border-foreground/30 bg-transparent text-foreground hover:border-primary hover:text-primary",
         ghost: "text-foreground hover:bg-secondary",
-        link: "text-foreground underline underline-offset-4 hover:text-pine-deep",
+        link: "text-primary underline underline-offset-4 hover:text-amber-bright",
       },
       size: {
-        default: "h-11 px-6 text-[0.95rem]",
-        sm: "h-9 px-4 text-[0.9rem]",
-        lg: "h-13 px-8 text-[1.0625rem]",
+        default: "h-11 px-6 text-[0.9rem]",
+        sm: "h-9 px-4 text-[0.85rem]",
+        lg: "h-13 px-8 text-[0.95rem]",
         icon: "size-11",
       },
     },

@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-hanken);
   --font-heading: var(--font-fraunces);
+  --font-mono: var(--font-courier);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -25,8 +26,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --color-paper-deep: var(--paper-deep);
-  --color-pine-deep: var(--pine-deep);
+  --color-pit: var(--pit);
+  --color-amber-bright: var(--amber-bright);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -39,35 +40,36 @@
 }
 
 :root {
-  --background: #f5f1e8;
-  --foreground: #26221a;
-  --card: #fbf8f1;
-  --card-foreground: #26221a;
-  --popover: #fbf8f1;
-  --popover-foreground: #26221a;
-  --primary: #32493a;
-  --primary-foreground: #f5f1e8;
-  --secondary: #e9e2d1;
-  --secondary-foreground: #26221a;
-  --muted: #ece6d7;
-  --muted-foreground: #5d5747;
-  --accent: #e9e2d1;
-  --accent-foreground: #26221a;
-  --destructive: #96402c;
-  --border: #dfd6c2;
-  --input: #c9bfa7;
-  --ring: #32493a;
-  --radius: 0.75rem;
-  --paper-deep: #ede7d8;
-  --pine-deep: #283b2e;
+  --background: #171310;
+  --foreground: #efe7d8;
+  --card: #1f1a14;
+  --card-foreground: #efe7d8;
+  --popover: #1f1a14;
+  --popover-foreground: #efe7d8;
+  --primary: #e3a94f;
+  --primary-foreground: #1a1510;
+  --secondary: #262019;
+  --secondary-foreground: #efe7d8;
+  --muted: #262019;
+  --muted-foreground: #a99f8c;
+  --accent: #262019;
+  --accent-foreground: #efe7d8;
+  --destructive: #e08563;
+  --border: #322b21;
+  --input: #453c2e;
+  --ring: #e3a94f;
+  --radius: 0.5rem;
+  --pit: #100d0a;
+  --amber-bright: #f0bd69;
+  --glow: rgba(227, 169, 79, 0.13);
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/60;
   }
 
   html {
@@ -88,8 +90,8 @@
   h3,
   h4 {
     font-family: var(--font-fraunces);
-    font-weight: 400;
-    letter-spacing: -0.015em;
+    font-weight: 380;
+    letter-spacing: -0.01em;
     line-height: 1.1;
     text-wrap: balance;
   }
@@ -108,7 +110,7 @@
 @utility wrap {
   margin-inline: auto;
   width: 100%;
-  max-width: 72rem;
+  max-width: 76rem;
   padding-inline: 1.25rem;
 
   @media (min-width: 640px) {
@@ -116,9 +118,28 @@
   }
 }
 
-/* Underline that draws in from the left on hover. */
+/* The house display voice: big, lowercase, italic Fraunces with the wonk on. */
+@utility display {
+  font-family: var(--font-fraunces);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: lowercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+}
+
+/* Typewriter data layer: labels, prices, times. Never for body copy. */
+@utility type-mono {
+  font-family: var(--font-courier);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--muted-foreground);
+}
+
+/* Amber underline that draws in from the left. */
 @utility link-draw {
-  background-image: linear-gradient(currentColor, currentColor);
+  background-image: linear-gradient(var(--primary), var(--primary));
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
@@ -132,20 +153,122 @@
   }
 }
 
+/* Candle glow that follows the pointer inside a row or card.
+   --gx / --gy are set by a tiny mousemove handler. */
+@utility glow-row {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      260px circle at var(--gx, 50%) var(--gy, 50%),
+      var(--glow),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 250ms var(--ease-out-strong);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+}
+
+/* Menu-card leader dots between a name and its price. */
+@utility dots {
+  flex: 1 1 auto;
+  min-width: 2ch;
+  border-bottom: 2px dotted color-mix(in srgb, var(--muted-foreground) 45%, transparent);
+  margin-inline: 0.6ch;
+  margin-bottom: 0.45em;
+  align-self: flex-end;
+}
+
+/* A photo mounted like a print: bone frame, mono caption, slight tilt. */
+@utility print-card {
+  background: #efe7d8;
+  color: #1a1510;
+  padding: 10px;
+  border-radius: 2px;
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+}
+
+/* Ambient fog drift, hero only. Transform loops stay on the compositor. */
+@keyframes fog-a {
+  from {
+    transform: translate3d(-6%, 2%, 0);
+  }
+  to {
+    transform: translate3d(5%, -3%, 0);
+  }
+}
+
+@keyframes fog-b {
+  from {
+    transform: translate3d(4%, -2%, 0);
+  }
+  to {
+    transform: translate3d(-5%, 3%, 0);
+  }
+}
+
+.fog-a,
+.fog-b {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+}
+
+.fog-a {
+  background: radial-gradient(
+    42% 34% at 68% 26%,
+    rgba(227, 169, 79, 0.08),
+    transparent 70%
+  );
+}
+
+.fog-b {
+  background: radial-gradient(
+    38% 30% at 24% 72%,
+    rgba(169, 159, 140, 0.06),
+    transparent 70%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fog-a {
+    animation: fog-a 46s var(--ease-in-out-strong) infinite alternate;
+  }
+  .fog-b {
+    animation: fog-b 58s var(--ease-in-out-strong) infinite alternate;
+  }
+}
+
 /* Scroll reveals. Content is fully visible without JavaScript;
    the .js class is added by an inline script in the root layout. */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal] {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(14px);
     transition:
-      opacity 650ms var(--ease-out-strong),
-      transform 650ms var(--ease-out-strong);
+      opacity 550ms var(--ease-out-strong),
+      transform 550ms var(--ease-out-strong);
     transition-delay: var(--reveal-delay, 0ms);
   }
 
   .js [data-reveal="visible"] {
     opacity: 1;
     transform: none;
+  }
+
+  .js [data-reveal].reveal-instant {
+    transition-duration: 0ms;
+    transition-delay: 0ms;
   }
 }

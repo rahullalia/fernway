@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Hanken_Grotesk } from "next/font/google";
+import { Courier_Prime, Fraunces, Hanken_Grotesk } from "next/font/google";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -18,6 +18,12 @@ const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
 });
 
+const courier = Courier_Prime({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-courier",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://fernway-pied.vercel.app"),
   title: {
@@ -25,19 +31,19 @@ export const metadata: Metadata = {
     template: "%s · Fernway",
   },
   description:
-    "Massage, facials, and body treatments in Hudson, New York. Every appointment includes the cedar sauna. Open Wednesday through Sunday.",
+    "Massage, facials, and a cedar sauna in Hudson, New York. Open Wednesday through Sunday, late on Thursdays.",
   robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f1e8",
+  themeColor: "#171310",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${hanken.variable}`}
+      className={`${fraunces.variable} ${hanken.variable} ${courier.variable}`}
       suppressHydrationWarning
     >
       <body className="flex min-h-svh flex-col">
@@ -48,7 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         <a
           href="#content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-primary focus:px-5 focus:py-2.5 focus:text-primary-foreground"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-primary focus:px-5 focus:py-2.5 focus:text-primary-foreground"
         >
           Skip to content
         </a>

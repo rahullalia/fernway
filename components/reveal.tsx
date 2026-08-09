@@ -39,6 +39,14 @@ export function Reveal<T extends React.ElementType = "div">({
   React.useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // Anything already on screen at load shows instantly; only content
+    // scrolled into view later gets the rise-in transition.
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) {
+      el.classList.add("reveal-instant");
+      el.setAttribute("data-reveal", "visible");
+      return;
+    }
     if (typeof IntersectionObserver === "undefined") {
       el.setAttribute("data-reveal", "visible");
       return;

@@ -41,7 +41,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group/trigger flex flex-1 items-center justify-between gap-6 py-6 text-left font-heading text-xl outline-none transition-colors hover:text-pine-deep disabled:pointer-events-none",
+          "group/trigger flex flex-1 items-center justify-between gap-6 py-6 text-left font-heading text-xl outline-none transition-colors hover:text-primary disabled:pointer-events-none",
           className
         )}
         {...props}
@@ -50,7 +50,7 @@ function AccordionTrigger({
         <svg
           aria-hidden="true"
           viewBox="0 0 16 16"
-          className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-(--ease-out-strong) group-aria-expanded/trigger:rotate-45"
+          className="size-4 shrink-0 text-primary transition-transform duration-200 ease-(--ease-out-strong) group-aria-expanded/trigger:rotate-45"
         >
           <path
             d="M8 2v12M2 8h12"
