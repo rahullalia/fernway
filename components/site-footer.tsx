@@ -5,53 +5,44 @@ import { site } from "@/lib/site";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-paper-deep">
-      <div className="wrap py-16 sm:py-20">
-        <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
-          <h2 className="font-heading text-4xl sm:text-5xl">
-            Ready when you are.
+    <footer className="border-t border-border bg-pit">
+      <div className="wrap py-20 sm:py-28">
+        <div className="flex flex-col items-start gap-10">
+          <p className="type-mono">closing time</p>
+          <h2 className="display max-w-[14ch] text-5xl sm:text-7xl">
+            we&rsquo;ll put the kettle on.
           </h2>
           <Button asChild size="lg">
-            <Link href="/book">Book an appointment</Link>
+            <Link href="/book">book an appointment</Link>
           </Button>
         </div>
 
-        <div className="mt-16 grid gap-10 border-t border-border pt-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-20 grid gap-x-8 gap-y-10 border-t border-border pt-10 sm:grid-cols-3">
           <div>
-            <p className="font-heading text-xl">Fernway</p>
-            <p className="mt-3 max-w-[26ch] text-muted-foreground">
-              Massage, skin care, and a very good cedar sauna in Hudson, New
-              York.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-sans text-sm font-medium">Visit</h3>
-            <address className="mt-3 text-muted-foreground not-italic">
-              {site.address.street}
-              <br />
-              {site.address.city}, {site.address.state} {site.address.zip}
+            <p className="type-mono mb-3 text-foreground">visit</p>
+            <address className="text-muted-foreground not-italic">
+              {site.address.street}, {site.address.city}, {site.address.state}{" "}
+              {site.address.zip}
               <br />
               <span className="text-sm">{site.address.note}</span>
             </address>
           </div>
 
           <div>
-            <h3 className="font-sans text-sm font-medium">Hours</h3>
-            <ul className="mt-3 space-y-1 text-muted-foreground">
+            <p className="type-mono mb-3 text-foreground">hours</p>
+            <ul className="space-y-1 text-muted-foreground">
               {site.hours.map((h) => (
-                <li key={h.days}>
-                  {h.days}
-                  <br />
-                  <span className="text-sm">{h.time}</span>
+                <li key={h.days} className="flex justify-between gap-4">
+                  <span>{h.days}</span>
+                  <span className="type-mono self-center">{h.time}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="font-sans text-sm font-medium">Get in touch</h3>
-            <ul className="mt-3 space-y-1 text-muted-foreground">
+            <p className="type-mono mb-3 text-foreground">elsewhere</p>
+            <ul className="space-y-1 text-muted-foreground">
               <li>
                 <a href={site.phoneHref} className="link-draw">
                   {site.phone}
@@ -62,11 +53,9 @@ export function SiteFooter() {
                   {site.email}
                 </a>
               </li>
-            </ul>
-            <ul className="mt-6 space-y-1 text-muted-foreground">
-              <li>
+              <li className="pt-4">
                 <Link href="/services" className="link-draw">
-                  Services and prices
+                  The menu
                 </Link>
               </li>
               <li>
@@ -78,10 +67,10 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col justify-between gap-2 border-t border-border pt-6 text-sm text-muted-foreground sm:flex-row">
-          <p>© 2026 Fernway Day Spa LLC</p>
-          <p>Prices current as of summer 2026.</p>
-        </div>
+        <p className="type-mono mt-16 flex flex-col justify-between gap-1 border-t border-border pt-6 sm:flex-row">
+          <span>© 2026 fernway day spa llc</span>
+          <span>prices current as of summer 2026</span>
+        </p>
       </div>
     </footer>
   );

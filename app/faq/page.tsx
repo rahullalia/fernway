@@ -17,20 +17,21 @@ export const metadata: Metadata = {
 
 export default function FaqPage() {
   return (
-    <section className="wrap grid gap-12 pt-10 pb-20 sm:pt-14 sm:pb-28 lg:grid-cols-12 lg:gap-16">
+    <section className="wrap grid gap-12 pt-12 pb-20 sm:pt-16 sm:pb-28 lg:grid-cols-12 lg:gap-16">
       <div className="lg:col-span-4">
-        <h1 className="text-5xl sm:text-6xl">Questions, answered</h1>
+        <p className="type-mono">asked at the desk, answered here</p>
+        <h1 className="display mt-3 text-6xl sm:text-7xl">questions</h1>
         <p className="mt-6 max-w-[36ch] text-muted-foreground">
-          Everything people actually ask the front desk, written down so Nora
-          can drink her coffee while it is still hot.
+          Everything people actually ask, written down so Nora can drink her
+          coffee while it is still hot.
         </p>
-        <p className="mt-8 text-muted-foreground">
-          Something else on your mind?
+        <p className="type-mono mt-8">
+          something else on your mind?
           <br />
           <a href={site.phoneHref} className="link-draw text-foreground">
             {site.phone}
           </a>{" "}
-          or{" "}
+          ·{" "}
           <a href={`mailto:${site.email}`} className="link-draw text-foreground">
             {site.email}
           </a>
@@ -38,10 +39,17 @@ export default function FaqPage() {
       </div>
       <Reveal className="lg:col-span-8" delay={80}>
         <Accordion type="single" collapsible defaultValue={faqs[0].q}>
-          {faqs.map((f) => (
+          {faqs.map((f, i) => (
             <AccordionItem key={f.q} value={f.q}>
-              <AccordionTrigger>{f.q}</AccordionTrigger>
-              <AccordionContent>{f.a}</AccordionContent>
+              <AccordionTrigger>
+                <span className="flex items-baseline gap-4">
+                  <span className="type-mono shrink-0 text-primary">
+                    {(i + 1).toString().padStart(2, "0")}
+                  </span>
+                  {f.q}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pl-10">{f.a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>

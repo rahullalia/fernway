@@ -1,200 +1,283 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowLink } from "@/components/arrow-link";
+import { Glow } from "@/components/glow";
 import { Reveal } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
-import { reviews } from "@/lib/site";
+import { reviews, serviceGroups } from "@/lib/site";
 
 import heroMassage from "@/public/images/hero-massage.jpg";
-import sauna from "@/public/images/sauna.jpg";
+import saunaAmber from "@/public/images/sauna-amber.jpg";
 import towelRack from "@/public/images/towel-rack.jpg";
+import towelsCounter from "@/public/images/towels-counter.jpg";
+import towelsStack from "@/public/images/towels-stack.jpg";
 
-const previews = [
+const chapters = [
   {
-    href: "/services#massage",
-    title: "Massage",
-    line: "Classic, deep tissue, prenatal.",
-    from: 135,
+    n: "01",
+    title: "arrive",
+    body: "Come up to thirty minutes early. The lockers have real keys, the robes are warm, and nobody hurries you down the hall.",
+    meta: "robes and slippers provided · phones stay in the lockers",
+    img: towelRack,
+    alt: "Linen towels and body brushes hanging from a wooden peg rail",
+    caption: "the hooks by the lockers",
   },
   {
-    href: "/services#skin",
-    title: "Skin",
-    line: "Facials matched to your skin that day, not to a menu.",
-    from: 85,
+    n: "02",
+    title: "the heat",
+    body: "The cedar sauna is included with everything we do. Twenty minutes in there and the week loosens its grip on your shoulders.",
+    meta: "included with every appointment · late night thursdays",
+    img: saunaAmber,
+    alt: "The cedar sauna glowing under two amber sconces",
+    caption: "the sauna, holding steady",
   },
   {
-    href: "/services#body",
-    title: "Body",
-    line: "Salt scrubs, the wet room, and the rain shower.",
-    from: 110,
+    n: "03",
+    title: "the table",
+    body: "Sixty or ninety minutes. The pressure you ask for, a therapist who asks the right questions and then stops talking.",
+    meta: "massage from $135 · facials from $85",
+    img: heroMassage,
+    alt: "A therapist working on a client's back by a steel-framed window",
+    caption: "room two, late afternoon",
+  },
+  {
+    n: "04",
+    title: "after",
+    body: "Chamomile or ginger, honey from two towns over. Sit in the front room as long as you like; the kettle does not close early.",
+    meta: "tea after, always · no upsell script, ever",
+    img: towelsStack,
+    alt: "A stack of white towels in a wicker basket on the warming shelf",
+    caption: "the warming shelf",
   },
 ];
 
 export default function HomePage() {
   return (
     <>
-      <section className="wrap grid items-center gap-10 pt-10 pb-16 sm:pt-14 lg:grid-cols-2 lg:gap-16 lg:pb-24">
-        <div>
-          <h1 className="text-[2.9rem] leading-[1.04] sm:text-6xl lg:text-[4.4rem] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both">
-            Take the hour.
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-border">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="fog-a" />
+          <div className="fog-b" />
+        </div>
+        <div className="wrap relative flex min-h-[88svh] flex-col justify-between pt-14 pb-10 sm:pt-20">
+          <h1 className="display text-[17.5vw] leading-[0.98] sm:text-[13vw] lg:text-[10.5vw]">
+            <span className="block motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both">
+              the last
+            </span>
+            <span className="block pl-[8vw] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both motion-safe:delay-100">
+              quiet room
+            </span>
+            <span className="block pl-[3vw] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both motion-safe:delay-200">
+              in hudson<span className="text-primary">.</span>
+            </span>
           </h1>
-          <p className="mt-6 max-w-[44ch] text-lg text-muted-foreground motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both motion-safe:delay-100">
-            Fernway is a small day spa in Hudson, New York: three treatment
-            rooms, a cedar sauna, and people who are good at their jobs. The
-            kettle is usually on.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-6 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both motion-safe:delay-200">
-            <Button asChild size="lg">
-              <Link href="/book">Book an appointment</Link>
-            </Button>
-            <ArrowLink href="/services">Services and prices</ArrowLink>
+
+          <div className="mt-12 flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
+            <div className="max-w-md motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-700 motion-safe:ease-out motion-safe:fill-mode-both motion-safe:delay-300">
+              <p className="text-lg text-muted-foreground">
+                Fernway is a small day spa behind the bookshop: three treatment
+                rooms, a cedar sauna, tea after. Thursdays we stay open late.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-5">
+                <Button asChild size="lg">
+                  <Link href="/book">book an appointment</Link>
+                </Button>
+                <Link href="/services" className="type-mono link-draw text-foreground">
+                  the menu, with prices
+                </Link>
+              </div>
+              <p className="type-mono mt-10">
+                massage · facials · cedar sauna · wed to sun, late thursdays
+              </p>
+            </div>
+
+            <figure className="print-card w-56 shrink-0 -rotate-2 self-end transition-transform duration-500 ease-(--ease-out-strong) sm:w-64 lg:hover:rotate-0 motion-safe:animate-in motion-safe:fade-in motion-safe:duration-1000 motion-safe:fill-mode-both motion-safe:delay-500">
+              <Image
+                src={towelsCounter}
+                alt="Folded towels on the front counter beside a lit candle"
+                placeholder="blur"
+                sizes="16rem"
+                className="aspect-[4/5] w-full object-cover"
+              />
+              <figcaption className="type-mono pt-2 text-[#5c5342]">
+                front desk, thursday 6:40pm
+              </figcaption>
+            </figure>
           </div>
-          <p className="mt-10 text-sm text-muted-foreground motion-safe:animate-in motion-safe:fade-in motion-safe:duration-700 motion-safe:fill-mode-both motion-safe:delay-300">
-            Open Wednesday through Sunday · 6 Fernway, Hudson, NY
-          </p>
-        </div>
-        <div className="relative motion-safe:animate-in motion-safe:fade-in motion-safe:duration-1000 motion-safe:ease-out motion-safe:fill-mode-both motion-safe:delay-150">
-          <Image
-            src={heroMassage}
-            alt="A therapist working on a client's back in a treatment room with a steel-framed window"
-            priority
-            placeholder="blur"
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="aspect-[4/3] w-full rounded-sm object-cover lg:aspect-[5/4]"
-          />
         </div>
       </section>
 
-      <section className="bg-paper-deep">
-        <div className="wrap grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-12">
-          <Reveal className="lg:col-span-7">
-            <h2 className="max-w-[16ch] text-4xl sm:text-5xl">
-              Small on purpose.
-            </h2>
-            <div className="mt-7 max-w-[54ch] space-y-5 text-muted-foreground">
-              <p>
-                There are three rooms, four of us, and one long hallway that
-                smells like cedar and eucalyptus. We keep the schedule light
-                enough that nobody gets hurried out the door, including you.
-              </p>
-              <p>
-                There are no membership tiers and no upsell script. You book
-                the hour, you get the whole hour, and the sauna is included
-                because it should be.
-              </p>
-            </div>
-            <div className="mt-8">
-              <ArrowLink href="/about">More about Fernway</ArrowLink>
-            </div>
-          </Reveal>
-          <Reveal className="lg:col-span-5" delay={120}>
-            <Image
-              src={towelRack}
-              alt="Linen towels and body brushes hanging from a wooden peg rail"
-              placeholder="blur"
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="aspect-[4/5] w-full rounded-sm object-cover"
-            />
-          </Reveal>
-        </div>
-      </section>
-
+      {/* The ritual */}
       <section className="wrap py-20 sm:py-28">
         <Reveal>
-          <h2 className="text-4xl sm:text-5xl">What we do</h2>
+          <p className="type-mono">how an evening here goes</p>
+          <h2 className="display mt-3 text-5xl sm:text-6xl">the ritual</h2>
         </Reveal>
-        <div className="mt-12">
-          {previews.map((p, i) => (
-            <Reveal key={p.href} delay={i * 70}>
-              <Link
-                href={p.href}
-                className="group flex items-baseline justify-between gap-6 border-t border-border py-7 transition-colors duration-200 hover:text-pine-deep"
+        <div className="mt-16 space-y-20 sm:space-y-28">
+          {chapters.map((c, i) => (
+            <Reveal
+              key={c.n}
+              className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16"
+            >
+              <div
+                className={
+                  i % 2
+                    ? "lg:order-2 lg:col-span-6"
+                    : "lg:col-span-6"
+                }
               >
-                <div>
-                  <h3 className="font-heading text-2xl sm:text-3xl">
-                    {p.title}
-                  </h3>
-                  <p className="mt-1.5 text-muted-foreground">{p.line}</p>
-                </div>
-                <span className="flex shrink-0 items-center gap-3 text-muted-foreground">
-                  <span className="text-sm sm:text-base">from ${p.from}</span>
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 16 16"
-                    className="size-4 transition-transform duration-250 ease-(--ease-out-strong) group-hover:translate-x-1"
-                  >
-                    <path
-                      d="M2 8h11m0 0L9.5 4.5M13 8l-3.5 3.5"
-                      stroke="currentColor"
-                      strokeWidth="1.25"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      fill="none"
-                    />
-                  </svg>
-                </span>
-              </Link>
+                <p className="type-mono text-2xl text-primary">{c.n}</p>
+                <h3 className="display mt-4 text-4xl sm:text-5xl">{c.title}</h3>
+                <p className="mt-5 max-w-[46ch] text-muted-foreground">{c.body}</p>
+                <p className="type-mono mt-6">{c.meta}</p>
+              </div>
+              <div
+                className={
+                  i % 2
+                    ? "lg:order-1 lg:col-span-5"
+                    : "lg:col-span-5 lg:col-start-8"
+                }
+              >
+                <figure
+                  className={`print-card transition-transform duration-500 ease-(--ease-out-strong) lg:hover:rotate-0 ${i % 2 ? "rotate-[1.2deg]" : "rotate-[-1.2deg]"}`}
+                >
+                  <Image
+                    src={c.img}
+                    alt={c.alt}
+                    placeholder="blur"
+                    sizes="(min-width: 1024px) 38vw, 100vw"
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                  <figcaption className="type-mono pt-2 text-[#5c5342]">
+                    {c.caption}
+                  </figcaption>
+                </figure>
+              </div>
             </Reveal>
           ))}
-          <div className="border-t border-border pt-7">
-            <ArrowLink href="/services" className="text-muted-foreground">
-              Everything, with prices
-            </ArrowLink>
-          </div>
         </div>
       </section>
 
-      <section className="bg-paper-deep">
-        <div className="wrap grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-2 lg:gap-16">
-          <Reveal>
-            <Image
-              src={sauna}
-              alt="Cedar sauna benches beside a stone-filled stove"
-              placeholder="blur"
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="aspect-[4/3] w-full rounded-sm object-cover"
-            />
-          </Reveal>
-          <Reveal delay={120}>
-            <h2 className="max-w-[14ch] text-4xl sm:text-5xl">
-              The sauna comes with.
-            </h2>
-            <div className="mt-7 max-w-[52ch] space-y-5 text-muted-foreground">
-              <p>
-                Every appointment includes the cedar sauna at the end of the
-                hall. Arrive up to thirty minutes early, change into a robe,
-                and warm up before your treatment starts.
-              </p>
-              <p>
-                Phones stay in the lockers, which is most of the reason it
-                stays quiet in there.
-              </p>
+      {/* The menu */}
+      <section className="border-y border-border bg-pit">
+        <div className="wrap py-20 sm:py-28">
+          <Reveal className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="type-mono">prices include the room, the sauna, and tea</p>
+              <h2 className="display mt-3 text-5xl sm:text-6xl">the menu</h2>
             </div>
-            <p className="mt-8 text-sm text-muted-foreground">
-              Just want the heat? Sauna-only sessions run Wednesday through
-              Friday: 45 minutes for $40.
+            <Link href="/services" className="type-mono link-draw text-foreground">
+              full descriptions
+            </Link>
+          </Reveal>
+
+          <div className="mt-14 space-y-12">
+            {serviceGroups.map((group) => (
+              <Reveal key={group.slug}>
+                <p className="type-mono mb-3 text-foreground">
+                  {group.title.toLowerCase()}
+                </p>
+                <div>
+                  {group.items.map((item) => (
+                    <Glow key={item.slug} className="rounded-[6px]">
+                      <Link
+                        href={`/services#${group.slug}`}
+                        className="flex items-baseline px-3 py-4 transition-colors duration-200 hover:text-amber-bright sm:px-4"
+                      >
+                        <span className="font-heading text-xl sm:text-2xl">
+                          {item.name}
+                        </span>
+                        <span className="type-mono ml-3 shrink-0">
+                          {item.duration}
+                        </span>
+                        <span className="dots" aria-hidden="true" />
+                        <span className="type-mono shrink-0 text-base text-foreground">
+                          ${item.price}
+                        </span>
+                      </Link>
+                    </Glow>
+                  ))}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal className="mt-14 flex flex-wrap items-center gap-6">
+            <Button asChild size="lg">
+              <Link href="/book">book an appointment</Link>
+            </Button>
+            <p className="type-mono">
+              add-ons and the fine print live on{" "}
+              <Link href="/services" className="link-draw text-foreground">
+                the full menu
+              </Link>
             </p>
           </Reveal>
         </div>
       </section>
 
+      {/* Guest book */}
       <section className="wrap py-20 sm:py-28">
         <Reveal>
-          <h2 className="text-4xl sm:text-5xl">From the guest book</h2>
+          <p className="type-mono">from the guest book</p>
         </Reveal>
-        <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
-          {reviews.map((r, i) => (
+        <Reveal as="figure" className="mt-8" delay={80}>
+          <blockquote className="display max-w-[24ch] text-4xl leading-[1.08] sm:text-5xl lg:text-6xl">
+            &ldquo;{reviews[2].quote.toLowerCase()}&rdquo;
+          </blockquote>
+          <figcaption className="type-mono mt-6">{reviews[2].name.toLowerCase()}</figcaption>
+        </Reveal>
+        <div className="mt-16 grid gap-10 border-t border-border pt-10 md:grid-cols-2">
+          {reviews.slice(0, 2).map((r, i) => (
             <Reveal as="figure" key={r.name} delay={i * 90}>
-              <blockquote className="font-heading text-xl leading-snug text-foreground/90 sm:text-2xl">
-                “{r.quote}”
+              <blockquote className="font-heading text-xl italic leading-snug text-foreground/90 sm:text-2xl">
+                &ldquo;{r.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-5 text-sm text-muted-foreground">
-                {r.name}
-              </figcaption>
+              <figcaption className="type-mono mt-4">{r.name.toLowerCase()}</figcaption>
             </Reveal>
           ))}
         </div>
+      </section>
+
+      {/* Visit strip */}
+      <section className="wrap pb-20 sm:pb-28">
+        <Reveal>
+          <Glow className="rounded-lg border border-border bg-card">
+            <div className="grid gap-10 p-7 sm:p-10 lg:grid-cols-12">
+              <div className="lg:col-span-5">
+                <h2 className="display text-4xl">finding us</h2>
+                <p className="mt-5 max-w-[38ch] text-muted-foreground">
+                  Number 6 on a short lane off Warren Street, behind the
+                  bookshop. Six minutes on foot from the Amtrak, which makes a
+                  9am massage and the 12:40 back to the city a reasonable plan.
+                </p>
+                <p className="type-mono mt-6">
+                  6 fernway, hudson, ny ·{" "}
+                  <a href="tel:+15185550114" className="link-draw text-foreground">
+                    (518) 555-0114
+                  </a>
+                </p>
+              </div>
+              <div className="type-mono self-center lg:col-span-6 lg:col-start-7">
+                <p className="mb-3 text-foreground">the week, at a glance</p>
+                {[
+                  ["wednesday", "9:30am to 7pm"],
+                  ["thursday", "9:30am to 9pm · late night"],
+                  ["friday", "9:30am to 7pm"],
+                  ["saturday + sunday", "9am to 6pm"],
+                  ["monday + tuesday", "closed"],
+                ].map(([d, t]) => (
+                  <p key={d} className="flex justify-between gap-6 border-b border-border/60 py-2 last:border-b-0">
+                    <span>{d}</span>
+                    <span>{t}</span>
+                  </p>
+                ))}
+                <p className="mt-4">same day? call the desk, we shuffle things.</p>
+              </div>
+            </div>
+          </Glow>
+        </Reveal>
       </section>
     </>
   );
