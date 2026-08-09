@@ -8,8 +8,10 @@ Live: https://fernway-pied.vercel.app
 
 - Next.js 16 (App Router, every route static)
 - Tailwind CSS v4, shadcn/ui primitives restyled to the house palette
-- Fraunces + Hanken Grotesk via `next/font`
+- Fraunces, Hanken Grotesk, and Courier Prime via `next/font`
 - Photos from Pexels (free license)
+
+The design runs dark: a warm near-black ground with candlelight amber, big lowercase italic display type, and a typewriter mono for prices, times, and captions (the building used to be a stationer's). The nav carries a live "open until" status line computed from the hours table, and the mobile menu is a bottom sheet.
 
 The booking widget is front-end only. Availability is seeded from the date so it looks and feels real, but nothing is stored and no email is sent. When a real spa takes this live, swap the submit handler for a scheduler API (Square, Boulevard, Cal.com) and keep the same UI.
 
