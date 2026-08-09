@@ -12,12 +12,31 @@ export const site = {
   phoneHref: "tel:+15185550114",
   email: "hello@fernwayhudson.com",
   hours: [
-    { days: "Wednesday to Friday", time: "9:30am to 7pm" },
+    { days: "Wednesday and Friday", time: "9:30am to 7pm" },
+    { days: "Thursday", time: "9:30am to 9pm" },
     { days: "Saturday and Sunday", time: "9am to 6pm" },
     { days: "Monday and Tuesday", time: "Closed" },
   ],
   closedDays: [1, 2], // Monday, Tuesday
 } as const;
+
+// Minutes from midnight, indexed Sunday through Saturday. null = closed.
+export const openHours: ({ open: number; close: number } | null)[] = [
+  { open: 540, close: 1080 }, // Sun 9 to 6
+  null, // Mon
+  null, // Tue
+  { open: 570, close: 1140 }, // Wed 9:30 to 7
+  { open: 570, close: 1260 }, // Thu 9:30 to 9, the late night
+  { open: 570, close: 1140 }, // Fri 9:30 to 7
+  { open: 540, close: 1080 }, // Sat 9 to 6
+];
+
+export function formatMinutes(mins: number) {
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const hour12 = ((h + 11) % 12) + 1;
+  return `${hour12}${m ? `:${m.toString().padStart(2, "0")}` : ""}${h < 12 ? "am" : "pm"}`;
+}
 
 export type ServiceItem = {
   slug: string;
