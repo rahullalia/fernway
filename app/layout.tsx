@@ -19,7 +19,7 @@ const hanken = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fernway.vercel.app"),
+  metadataBase: new URL("https://fernway-pied.vercel.app"),
   title: {
     default: "Fernway · Day spa in Hudson, NY",
     template: "%s · Fernway",

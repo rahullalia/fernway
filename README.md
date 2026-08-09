@@ -2,7 +2,7 @@
 
 Marketing site and booking flow for Fernway, a fictional day spa in Hudson, NY. Built as a demo piece; the business, people, and phone number are made up.
 
-Live: https://fernway.vercel.app
+Live: https://fernway-pied.vercel.app
 
 ## Stack
 
