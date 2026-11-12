@@ -47,11 +47,16 @@ function statusFor(now: Date) {
   return "";
 }
 
+const noUpdates = () => () => {};
+
 function StatusLine({ className }: { className?: string }) {
-  const [status, setStatus] = React.useState("wed to sun · late thursdays");
-  React.useEffect(() => {
-    setStatus(statusFor(new Date()));
-  }, []);
+  // The server can't know the visitor's clock, so it renders the general hours;
+  // the browser swaps in today's status as soon as it hydrates.
+  const status = React.useSyncExternalStore(
+    noUpdates,
+    () => statusFor(new Date()),
+    () => "wed to sun · late thursdays",
+  );
   return (
     <p className={cn("type-mono", className)}>
       <span aria-hidden="true" className="mr-2 inline-block size-[7px] rounded-full bg-primary align-middle" />
@@ -67,10 +72,13 @@ export function SiteHeader() {
   const closeRef = React.useRef<HTMLButtonElement>(null);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
-  React.useEffect(() => {
+  // Close both menus when the route changes (adjusted during render, not in an effect).
+  const [menusFor, setMenusFor] = React.useState(pathname);
+  if (pathname !== menusFor) {
+    setMenusFor(pathname);
     setOverlayOpen(false);
     setDrawerOpen(false);
-  }, [pathname]);
+  }
 
   React.useEffect(() => {
     if (overlayOpen) {
